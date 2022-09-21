@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Critical Roll</string>
+    <string name="crit_hit">Critical Hit!</string>
+    <string name="crit_miss">Critical Miss!</string>
 </resources>
