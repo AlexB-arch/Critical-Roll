@@ -2,6 +2,9 @@ package com.example.criticalroll;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -19,6 +22,15 @@ public class MainActivity extends AppCompatActivity {
     ImageView die;
     TextView crit;
 
+    //Axis attributes for shake function
+    ImageView diceX;
+    ImageView diceY;
+    ImageView diceZ;
+
+    //Sensors
+    SensorManager sensorManager;
+    Sensor accelerometerSensor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +42,16 @@ public class MainActivity extends AppCompatActivity {
 
         //Text View for critical message
         crit = findViewById(R.id.crit_message);
+
+        //Shake function attributes
+        diceX = findViewById(R.id.die_face_image);
+        diceY = findViewById(R.id.die_face_image);
+        diceZ = findViewById(R.id.die_face_image);
+
+        //Sets the sensor manager
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        //if (sensorManager.getDefaultSensor())
 
         //onClick listener
         die.setOnClickListener(new View.OnClickListener() {
@@ -124,4 +146,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Roll dice on phone shake
+    public void shakePhone(){
+
+    }
 }
