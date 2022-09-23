@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +24,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     //Initiate random number generator class.
     public Random rngeezus = new Random();
+
+    //Initiate animation class
+    public Animation animation;
 
     //Views
     public ImageView die;
@@ -73,12 +78,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View view) {
                 rollDice();
+                animateDice();
             }
         });
     }
 
     public void rollDice(){
-        int rng = rngeezus.nextInt(6) + 1;
+        int rng = rngeezus.nextInt(20) + 1;
 
         toggleCritMessage(rng);
 
@@ -161,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    //Logic for Accelerometer sensor.
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         xText.setText(sensorEvent.values[0]+"m/s2");
@@ -184,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                     //Rolls dice upon shaking the phone.
                     rollDice();
+                    animateDice();
                 }
                 else {
                     //Deprecated in API 26.
@@ -191,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     //Rolls dice upon shaking the phone.
                     rollDice();
+                    animateDice();
                 }
             }
         }
@@ -207,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    //Allows the app to use the shake function upon opening again.
     @Override
     public void onResume(){
         super.onResume();
@@ -215,11 +225,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             sensorManager.registerListener(this, accelerometerSensor, sensorManager.SENSOR_DELAY_NORMAL);
     }
 
+    //Prevents phone from shaking when app is closed.
     @Override
     public void onPause(){
         super.onPause();
 
         if (isAccelerometerAvailable == false)
             sensorManager.unregisterListener(this);
+    }
+
+    //Animate the die on click or shake.
+    public void animateDice(){
+        animation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+
+        die.startAnimation(animation);
     }
 }
