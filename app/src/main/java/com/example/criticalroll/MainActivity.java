@@ -182,10 +182,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                     vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                    //Rolls dice upon shaking the phone.
+                    rollDice();
                 }
                 else {
-                    vibrator.vibrate(500);
                     //Deprecated in API 26.
+                    vibrator.vibrate(500);
+
+                    //Rolls dice upon shaking the phone.
+                    rollDice();
                 }
             }
         }
