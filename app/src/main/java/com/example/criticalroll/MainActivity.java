@@ -4,32 +4,40 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     //Initiate random number generator class.
-    Random rngeezus = new Random();
+    public Random rngeezus = new Random();
 
     //Views
-    ImageView die;
-    TextView crit;
+    public ImageView die;
+    public TextView crit;
 
     //Axis attributes for shake function
-    ImageView diceX;
-    ImageView diceY;
-    ImageView diceZ;
-
-    //Sensors
-    SensorManager sensorManager;
-    Sensor accelerometerSensor;
+    public TextView xText;
+    public TextView yText;
+    public TextView zText;
+    public boolean isAccelerometerAvailable, accelerometerAlreadyInUse  = false;
+    public float currentX, currentY, currentZ, lastX, lastY, lastZ;
+    public float xDifference, yDifference, zDifference;
+    public float shakeThreshold = 5f;
+    public Vibrator vibrator;
+    public SensorManager sensorManager;
+    public Sensor accelerometerSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +52,21 @@ public class MainActivity extends AppCompatActivity {
         crit = findViewById(R.id.crit_message);
 
         //Shake function attributes
-        diceX = findViewById(R.id.die_face_image);
-        diceY = findViewById(R.id.die_face_image);
-        diceZ = findViewById(R.id.die_face_image);
-
-        //Sets the sensor manager
+        xText = findViewById(R.id.xText);
+        yText = findViewById(R.id.yText);
+        zText = findViewById(R.id.zText);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        //if (sensorManager.getDefaultSensor())
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+            accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            isAccelerometerAvailable = true;
+        }
+        else{
+            xText.setText("Accelerometer unavailable");
+            isAccelerometerAvailable = false;
+        }
+
 
         //onClick listener
         die.setOnClickListener(new View.OnClickListener() {
@@ -146,8 +161,60 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Roll dice on phone shake
-    public void shakePhone(){
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        xText.setText(sensorEvent.values[0]+"m/s2");
+        yText.setText(sensorEvent.values[1]+"m/s2");
+        zText.setText(sensorEvent.values[2]+"m/s2");
 
+        currentX = sensorEvent.values[0];
+        currentY = sensorEvent.values[1];
+        currentZ = sensorEvent.values[2];
+
+        if (accelerometerAlreadyInUse == true){
+            xDifference = Math.abs(lastX - currentX);
+            yDifference = Math.abs(lastY - currentY);
+            zDifference = Math.abs(lastZ - currentZ);
+
+            if ((xDifference > shakeThreshold && yDifference > shakeThreshold) ||
+                    (xDifference > shakeThreshold && zDifference > shakeThreshold) ||
+                    (yDifference > shakeThreshold && zDifference > shakeThreshold)){
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                }
+                else {
+                    vibrator.vibrate(500);
+                    //Deprecated in API 26.
+                }
+            }
+        }
+
+        lastX = currentX;
+        lastY = currentY;
+        lastZ = currentZ;
+
+        accelerometerAlreadyInUse = true;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        if (isAccelerometerAvailable == true)
+            sensorManager.registerListener(this, accelerometerSensor, sensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        if (isAccelerometerAvailable == false)
+            sensorManager.unregisterListener(this);
     }
 }
