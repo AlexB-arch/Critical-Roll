@@ -26,10 +26,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public Random rngeezus = new Random();
 
     //Initiate animation class
-    public Animation animation;
+    public Animation animation_dice;
+    public Animation animation_splash;
 
     //Views
     public ImageView die;
+    public ImageView splash;
     public TextView crit;
 
     //Axis attributes for shake function
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         //Text View for critical message
         crit = findViewById(R.id.crit_message);
+        splash = findViewById(R.id.crit_splash);
 
         //Shake function attributes
         xText = findViewById(R.id.xText);
@@ -77,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         die.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rollDice();
                 animateDice();
+                rollDice();
             }
         });
     }
@@ -155,15 +158,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //Only display the message if the dice is 1 or 20.
     public void toggleCritMessage(int toggle){
         if (toggle == 1){
-            crit.setText(getString(R.string.crit_miss));
-            crit.setVisibility(View.VISIBLE);
+            splash.setImageResource(R.drawable.crit_miss_splash);
+            animateCritSplash();
         }
         else if (toggle == 20){
-            crit.setText(getString(R.string.crit_hit));
-            crit.setVisibility(View.VISIBLE);
+            splash.setImageResource(R.drawable.crit_hit_splash);
+            animateCritSplash();
         }
         else{
-            crit.setVisibility(View.INVISIBLE);
+            splash.setImageResource(android.R.color.transparent);
         }
     }
 
@@ -236,8 +239,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     //Animate the die on click or shake.
     public void animateDice(){
-        animation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        animation_dice = AnimationUtils.loadAnimation(this, R.anim.rotate);
 
-        die.startAnimation(animation);
+        die.startAnimation(animation_dice);
+    }
+
+    public void animateCritSplash(){
+        animation_splash = AnimationUtils.loadAnimation(this, R.anim.bounce);
+
+        splash.startAnimation(animation_splash);
     }
 }
