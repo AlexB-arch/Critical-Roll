@@ -90,64 +90,64 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         switch (rng){
             case 1:
-                die.setImageResource(R.drawable.dice1);
+                die.setImageResource(R.drawable.d20_1);
                 break;
             case 2:
-                die.setImageResource(R.drawable.dice2);
+                die.setImageResource(R.drawable.d20_2);
                 break;
             case 3:
-                die.setImageResource(R.drawable.dice3);
+                die.setImageResource(R.drawable.d20_3);
                 break;
             case 4:
-                die.setImageResource(R.drawable.dice4);
+                die.setImageResource(R.drawable.d20_4);
                 break;
             case 5:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_5);
                 break;
             case 6:
-                die.setImageResource(R.drawable.dice6);
+                die.setImageResource(R.drawable.d20_6);
                 break;
             case 7:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_7);
                 break;
             case 8:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_8);
                 break;
             case 9:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_9);
                 break;
             case 10:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_10);
                 break;
             case 11:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_11);
                 break;
             case 12:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_12);
                 break;
             case 13:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_13);
                 break;
             case 14:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_14);
                 break;
             case 15:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_15);
                 break;
             case 16:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_16);
                 break;
             case 17:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_17);
                 break;
             case 18:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_18);
                 break;
             case 19:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_19);
                 break;
             case 20:
-                die.setImageResource(R.drawable.dice5);
+                die.setImageResource(R.drawable.d20_20);
                 break;
         }
     }
