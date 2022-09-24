@@ -7,9 +7,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.View;
@@ -28,6 +28,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //Initiate animation class
     public Animation animation_dice;
     public Animation animation_splash;
+
+    //Initiates sound class.
+    public MediaPlayer miss;
+    public MediaPlayer hit;
+    public MediaPlayer roll;
 
     //Views
     public ImageView die;
@@ -63,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         xText = findViewById(R.id.xText);
         yText = findViewById(R.id.yText);
         zText = findViewById(R.id.zText);
+
+        //Only make text visible for debugging purposes
+        xText.setVisibility(View.GONE);
+        yText.setVisibility(View.GONE);
+        zText.setVisibility(View.GONE);
+
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -88,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void rollDice(){
         int rng = rngeezus.nextInt(20) + 1;
+
+        //Plays a sound
+        roll = MediaPlayer.create(this, R.raw.roll);
+        roll.start();
 
         toggleCritMessage(rng);
 
@@ -160,10 +175,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (toggle == 1){
             splash.setImageResource(R.drawable.crit_miss_splash);
             animateCritSplash();
+
+            //Plays a sound
+            miss =  MediaPlayer.create(this, R.raw.miss);
+            miss.start();
         }
         else if (toggle == 20){
             splash.setImageResource(R.drawable.crit_hit_splash);
             animateCritSplash();
+
+            //Plays a sound
+            hit = MediaPlayer.create(this, R.raw.hit);
+            hit.start();
         }
         else{
             splash.setImageResource(android.R.color.transparent);
@@ -248,5 +271,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         animation_splash = AnimationUtils.loadAnimation(this, R.anim.bounce);
 
         splash.startAnimation(animation_splash);
+    }
+
+    public void soundEffect(){
     }
 }
