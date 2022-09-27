@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xsi:schemaLocation="http://schemas.android.com/apk/res/android"
+    xmlns:xsi="http://schemas.android.com/aapt">
+    <item>
+        <shape
+            android:shape="rectangle"
+            tools:ignore="NamespaceTypo">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#3F51B5"
+                android:endColor="#00BCD4" />
+        </shape>
+    </item>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/droid20" />
+    </item>
+    <item>
+        <bitmap
+            android:gravity="bottom"
+            android:src="@drawable/droid20" />
+    </item>
+</layer-list>

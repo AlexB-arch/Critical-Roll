@@ -56,6 +56,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Sound
+        roll = MediaPlayer.create(this, R.raw.roll);
+        miss =  MediaPlayer.create(this, R.raw.miss);
+        hit = MediaPlayer.create(this, R.raw.hit);
+
         //Image View for with the die
         die = findViewById(R.id.die_face_image);
         die.setImageResource(R.drawable.d20_20);
@@ -101,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         int rng = rngeezus.nextInt(20) + 1;
 
         //Plays a sound
-        roll = MediaPlayer.create(this, R.raw.roll);
         roll.start();
+        roll.seekTo(0);
 
         toggleCritMessage(rng);
 
@@ -177,16 +182,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             animateCritSplash();
 
             //Plays a sound
-            miss =  MediaPlayer.create(this, R.raw.miss);
             miss.start();
+            miss.seekTo(0);
         }
         else if (toggle == 20){
             splash.setImageResource(R.drawable.crit_hit_splash);
             animateCritSplash();
 
             //Plays a sound
-            hit = MediaPlayer.create(this, R.raw.hit);
             hit.start();
+            hit.seekTo(0);
         }
         else{
             splash.setImageResource(android.R.color.transparent);
@@ -204,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         currentY = sensorEvent.values[1];
         currentZ = sensorEvent.values[2];
 
-        if (accelerometerAlreadyInUse == true){
+        if (accelerometerAlreadyInUse){
             xDifference = Math.abs(lastX - currentX);
             yDifference = Math.abs(lastY - currentY);
             zDifference = Math.abs(lastZ - currentZ);
@@ -247,8 +252,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onResume(){
         super.onResume();
 
-        if (isAccelerometerAvailable == true)
-            sensorManager.registerListener(this, accelerometerSensor, sensorManager.SENSOR_DELAY_NORMAL);
+        if (isAccelerometerAvailable)
+            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     //Prevents phone from shaking when app is closed.
@@ -256,8 +261,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onPause(){
         super.onPause();
 
-        if (isAccelerometerAvailable == false)
+        if (isAccelerometerAvailable)
             sensorManager.unregisterListener(this);
+
+        //Pauses sound when app is in background
+        miss.pause();
+        hit.pause();
+        roll.pause();
     }
 
     //Animate the die on click or shake.
@@ -271,8 +281,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         animation_splash = AnimationUtils.loadAnimation(this, R.anim.bounce);
 
         splash.startAnimation(animation_splash);
-    }
-
-    public void soundEffect(){
     }
 }
