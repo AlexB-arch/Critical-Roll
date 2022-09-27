@@ -19,9 +19,4 @@
             android:gravity="center"
             android:src="@drawable/droid20" />
     </item>
-    <item>
-        <bitmap
-            android:gravity="bottom"
-            android:src="@drawable/droid20" />
-    </item>
 </layer-list>
